@@ -115,5 +115,32 @@ this proxies the https connection via local kube/config user to the cluster.
 
 # Add nginx ingress
 
-TODO
- 
+yaml files based on these examples: https://github.com/jetstack/kube-lego/tree/master/examples/nginx 
+
+## execute
+
+setup default backend and nginx ingress
+run:
+
+```
+kubectl apply -f nginx-namespace.yaml
+
+kubectl apply -f default-http-backend-svc.yaml
+kubectl apply -f default-http-backend-deployment.yaml
+
+kubectl apply -f nginx-configmap.yaml
+kubectl apply -f nginx-svc.yaml
+kubectl apply -f nginx-deployment.yaml
+```
+
+now everything that hits port 80 will get a 
+```
+default backend - 404
+```
+
+## SSL
+
+as shown here: https://github.com/kubernetes/contrib/blob/master/ingress/controllers/nginx/configuration.md
+we are using the ssl-redirect annotation in the ingress
+ingress.kubernetes.io/ssl-redirect: true
+
