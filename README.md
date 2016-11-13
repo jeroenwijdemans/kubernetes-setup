@@ -82,6 +82,8 @@ kubectl config set contexts.default-context.namespace default
 kubectl config view
 ```
 
+Note: if you want to setup Jenkins you will need a different location for this config. For example on the master it could be: /var/lib/jenkins/.kube
+
 
 ## disable authorization 
 
@@ -138,9 +140,25 @@ now everything that hits port 80 will get a
 default backend - 404
 ```
 
+## enable lego auto-letsencrypt
+
+```
+kubectl apply -f lego/configmap.yaml
+kubectl apply -f lego/deployment.yaml
+```
+
 ## SSL
 
-as shown here: https://github.com/kubernetes/contrib/blob/master/ingress/controllers/nginx/configuration.md
 we are using the ssl-redirect annotation in the ingress
 ingress.kubernetes.io/ssl-redirect: true
 
+each ingress needs to have these annotation IN THIS ORDER
+
+```    
+kubernetes.io/ingress.class: "nginx"
+kubernetes.io/tls-acme: "true"
+```
+
+as shown here: https://github.com/kubernetes/contrib/blob/master/ingress/controllers/nginx/configuration.md
+
+forgetting to include a secret name will prompt kube-lego to retry, and retry, etc until you are rate-limited an can try again in a weeks time.  
