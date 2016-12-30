@@ -32,6 +32,8 @@ WantedBy=multi-user.target
 
 ## Change kubeapi port
 
+*NOTE in the new Kubernetes (1.4.4) this is set to 6443*
+
 The default port for the master is 443. But since we setup a single machine we want 
 to use 443 to route to a ingress nginx controller.
  So we change the port to 8443
@@ -53,11 +55,11 @@ on the cluster create a user:
 ```
 kubectl create sa jenkins
 kubectl get secret
-kubectl describe jenkins-token-qqzod
+kubectl describe secret jenkins-token-qqzod
 ```
 
  - note down the token 
- - and fetch the ca from /etc/kubernetes/ssl/ca.crt
+ - and fetch the ca from /etc/kubernetes/ssl/ca.crt or (since 1.4.x) fetch the ca from /etc/kubernetes/pki/ca.pem 
 
 ## set kubectl config
 
